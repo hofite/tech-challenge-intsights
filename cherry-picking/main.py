@@ -1,9 +1,9 @@
 import cherrypick
-import alerts_input
 
 
 def main():
-    return cherrypick.alerts_cherry_picking(alerts_input.alerts)
+    ap = cherrypick.AlertPicker()
+    return ap.alerts_cherry_picking()
 
 
 if __name__ == "__main__":
