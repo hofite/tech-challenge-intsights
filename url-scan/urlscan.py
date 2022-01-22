@@ -17,15 +17,15 @@ def get_quotas():
 
 
 # domain:tines.io  OR yyi1i.co - query input example
-def search_scans_by_query(query):
+def search_scans_by_query(query, search_data):
     quotas = get_quotas()
-    search_data = []
     url = "https://urlscan.io/api/v1/search/"
     headers = {"Content-Type": "application/json", "API-Key": "0e55a0ee-2ec5-4db0-a713-409aefdb3790"}
     payload = {'q': query, 'size': 10000, 'search_after': None}
 
     if quotas['day'] <= 0 or quotas['hour'] <= 0 or quotas['minute'] <= 0:
-        return "You have exceeded your limit"
+        print("You have exceeded your limit: query " + query + " is not executed")
+        return
 
     try:
         while True:
@@ -45,7 +45,7 @@ def search_scans_by_query(query):
     except Exception as e:
         print(e.__class__)
 
-    return search_data
+    return
 
 
 def data_convert(obj):

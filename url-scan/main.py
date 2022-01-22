@@ -1,18 +1,21 @@
 import urlscan
+from threading import Thread
 
 
 def main():
-    quotas = urlscan.get_quotas()
-    query = input("Enter queries (separated by a comma): \n")
-    response = urlscan.search_scans_by_query(query)
-    quotas = urlscan.get_quotas()
+    str_input = input("Enter queries (separated by a commas): \n")
+    queries = str_input.split(',')
+    threads = []
+    result = {key:[] for key in queries}
+    for query in queries:
+        t = Thread(target=urlscan.search_scans_by_query, args=(query, result[query]))
+        threads.append(t)
+        t.start()
+    for thread in threads:
+        thread.join()
 
-
-    if response.__class__ == str:
-        print(response)
-        return None
-    else:
-        return {'results': response}
+    print(result)
+    return result
 
 
 if __name__ == "__main__":
