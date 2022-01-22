@@ -6,7 +6,7 @@ def main():
     str_input = input("Enter queries (separated by a commas): \n")
     queries = str_input.split(',')
     threads = []
-    result = {key:[] for key in queries}
+    result = {key: [] for key in queries}
     for query in queries:
         t = Thread(target=urlscan.search_scans_by_query, args=(query, result[query]))
         threads.append(t)
@@ -14,7 +14,6 @@ def main():
     for thread in threads:
         thread.join()
 
-    print(result)
     return result
 
 
