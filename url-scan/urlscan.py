@@ -1,10 +1,11 @@
 import requests
 import json
+import config_file
 
 
 def get_quotas():
-    url = "https://urlscan.io/user/quotas/"
-    headers = {"Content-Type": "application/json", "API-Key": "0e55a0ee-2ec5-4db0-a713-409aefdb3790"}
+    url = config_file.quotas_url
+    headers = {"Content-Type": "application/json", "API-Key": config_file.api_key}
     try:
         response = requests.get(url, headers=headers)
         data_string = response.content.decode('utf-8')
@@ -16,11 +17,10 @@ def get_quotas():
     return search_quotas
 
 
-# domain:tines.io  OR yyi1i.co - query input example
 def search_scans_by_query(query, search_data):
     quotas = get_quotas()
-    url = "https://urlscan.io/api/v1/search/"
-    headers = {"Content-Type": "application/json", "API-Key": "0e55a0ee-2ec5-4db0-a713-409aefdb3790"}
+    url = config_file.search_url
+    headers = {"Content-Type": "application/json", "API-Key": config_file.api_key}
     payload = {'q': query, 'size': 10000, 'search_after': None}
 
     if quotas['day'] <= 0 or quotas['hour'] <= 0 or quotas['minute'] <= 0:
@@ -50,5 +50,4 @@ def search_scans_by_query(query, search_data):
 
 def data_convert(obj):
     return [{'page_url': res['page']['url'], 'page_screenshot': res['screenshot']} for res in obj['results']]
-
 
