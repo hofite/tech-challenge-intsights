@@ -10,22 +10,21 @@ def main():
     threads = []
     l = 0  # l represents the number of threads, except for the main
 
-    while True:
+    while l < len(queries):
         quotas = urlscan.get_quotas()
         if quotas['day'] == 0 or quotas['hour'] == 0:
             print("You have exceeded your hourly/daily limit, there might be partial results")
             break
         quota = min(quotas.values())
-        for i in range(quota):
+        for i in range(min(quota, len(queries)-l)):  # run new searching with the limit of quota and remaining queries
             t = Thread(target=urlscan.search_scans_by_query, args=(queries[l], result[queries[l]]))
             l += 1
             threads.append(t)
             t.start()
-            if len(queries) == l:
-                break
-        if len(queries) == l:
+        if l == len(queries):
             break
-        time.sleep(60)
+        else:
+            time.sleep(60)
 
     for thread in threads:
         thread.join()
