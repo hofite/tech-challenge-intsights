@@ -1,16 +1,32 @@
 import urlscan
 from threading import Thread
+import time
 
 
 def main():
     str_input = input("Enter queries (separated by a commas): \n")
     queries = str_input.split(',')
-    threads = []
     result = {key: [] for key in queries}
-    for query in queries:
-        t = Thread(target=urlscan.search_scans_by_query, args=(query, result[query]))
-        threads.append(t)
-        t.start()
+    threads = []
+    l = 0  # l represents the number of threads, except for the main
+
+    while True:
+        quotas = urlscan.get_quotas()
+        if quotas['day'] == 0 or quotas['hour'] == 0:
+            print("You have exceeded your hourly/daily limit, there might be partial results")
+            break
+        quota = min(quotas.values())
+        for i in range(quota):
+            t = Thread(target=urlscan.search_scans_by_query, args=(queries[l], result[queries[l]]))
+            l += 1
+            threads.append(t)
+            t.start()
+            if len(queries) == l:
+                break
+        if len(queries) == l:
+            break
+        time.sleep(60)
+
     for thread in threads:
         thread.join()
 
