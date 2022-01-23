@@ -43,7 +43,7 @@ this phase is executed until 4 alerts are picked (the list contains 4 alert_ids)
 * Conclusion: **O(nlogn)**
 
 
-## Other implementation Option:
+## Other Implementation Option:
 
 * Bucket sorting the alerts by type+subtype priority.
 * Sort the first priority bucket alerts by date.
