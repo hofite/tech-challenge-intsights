@@ -1,16 +1,16 @@
 # Url-Scan - README:
 
-**Description:**
+## Description:
 
 Url-Scan is a program for searching url scans performed by the online service urlscan.io (https://urlscan.io). The program gets a list of queries and returns for each query the urls and screenshot of the pages detected as malicious by urlscan.io service.
 
-**Running:**
+## Running:
 
 Run the program, in the program console input line, enter a single query or a list of queries separated by a comma. The queries must be ElasticSearch query string queries.
 
-**Algorithm Description:**
+## Algorithm Description:
 
-**Quotas Management:**
+### Quotas Management:
 
 The program gets current quotas of the user by using Http GET request to urlscan.io Quotas API.
 If the user exceeded the hourly/daily quota, the program will stop sending queries for searching, and will return the results it has till that point.
@@ -24,7 +24,7 @@ If the number of queries is bigger than the minute quota, the program waits for 
 * Larger quotas will increase efficiency. In addition, running the program with query list smaller than the minute quota will not suffer from this decrease in efficiency.
 
 
-**Searching Url Scans by Query:**
+### Searching Url Scans by Query:
 
 Each thread runs search_scans_by_query function, the function sends a Http GET request to the urlscan.io Search API.
 If the total number of results for a query in the response is bigger than 100, the API returns only the first 100 results, for getting the following results the programs sends the same Http GET, with a “search_after” property in the payload, contains an identifier of the last result received.
@@ -32,7 +32,7 @@ The response received for the Http GET request contains a lot of data, the progr
 
 *The program has config_file contains the urls for urscan.io APIs and the user api-key for accessing the API.
 
-**Multithreading:**
+### Multithreading:
 
 * I chose to implement the program using multithreading access, I found it efficient for the amount of searches requested in the task (hundreds of queries).
 
