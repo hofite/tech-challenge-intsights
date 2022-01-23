@@ -14,7 +14,7 @@ class AlertPicker:
 
     def alerts_cherry_picking(self):
         alerts_ids = []
-        sorted_alerts = sorted(alerts_input.alerts, key=(lambda a: (-self.type_subtype_map[a['Details']['Type'] + a['Details']['SubType']][0], a['FoundDate'])), reverse=True)
+        sorted_alerts = sorted(alerts_input.alerts, key=self.sort_key_function, reverse=True)
         for alert in sorted_alerts:
             if self.search_title_identifiers(alert):
                 alerts_ids.append(alert['_id'])
@@ -29,3 +29,9 @@ class AlertPicker:
             if title in alert['Title']:
                 return True
         return False
+
+    def sort_key_function(self, alert):
+        # lower priority score comes first, also newer dates come first.
+        # we'll take key=(-priority, date), and sort in reverse, so that the biggest value has the lowest priority score
+        alert_priority = self.type_subtype_map[alert['Details']['Type'] + alert['Details']['SubType']][0]
+        return -alert_priority, alert['FoundDate']
